@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="HaskellBuildOptions">
+    <useCabalSandbox>true</useCabalSandbox>
+    <useProfilingBuild>true</useProfilingBuild>
+    <ghcPath>C:\Program Files\Haskell Platform\2014.2.0.0\bin\ghc.exe</ghcPath>
+    <cabalPath>C:\sr\setup-exe-cache\i386-windows\Cabal-simple_Z6RU0evB_2.0.1.0_ghc-8.2.2.exe</cabalPath>
+    <installDependencies>true</installDependencies>
+    <useStack>true</useStack>
+    <stackPath>C:\install\stack\bin\stack.exe</stackPath>
+    <stackFile>c:\sr\global-project\stack.yaml</stackFile>
+  </component>
+</project>

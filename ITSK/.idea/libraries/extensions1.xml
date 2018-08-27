@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="extensions1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/resource/FirefoxPortable/Data/plugins/extensions.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
