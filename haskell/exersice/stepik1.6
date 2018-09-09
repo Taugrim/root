@@ -1,0 +1,7 @@
+integration :: (Double -> Double) -> Double -> Double -> Double
+integration f a b = let
+    n=1000
+    h=(a-b)/n 
+    sumF  =[f x|x<-[b,b+h..a]]
+    summ =(sum sumF  )*h+h/1000
+    in (-summ)
