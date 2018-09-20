@@ -1,0 +1,9 @@
+INFO - [TestNumber] = 1   эталон-[TestNumber] = 1
+INFO - [TestNumber] = -1 reqwests-26   victory-21   procentVictory-80.76923076923076 %
+INFO - [TestNumber] = 2   эталон-[TestNumber] = 2
+INFO - [TestNumber] = -1 reqwests-30   victory-25   procentVictory-83.33333333333334 %
+INFO - [TestNumber] = -1   эталон-[TestNumber] = 3
+INFO - [TestNumber] = -1 reqwests-34   victory-28   procentVictory-82.3529411764706 %
+INFO - [TestNumber] = -1   эталон-[TestNumber] = 4
+INFO - [TestNumber] = -1 reqwests-38   victory-30   procentVictory-78.94736842105263 %
+INFO - [TestNumber] = -1   эталон-[TestNumber] = 5

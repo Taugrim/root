@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="TestZodiac:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="TestTask-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="TestZodiac:war exploded" />
+    </root>
+  </artifact>
+</component>
