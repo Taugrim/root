@@ -1,2 +1,0 @@
-myLast (x:xs)=myLast xs
-myLast (x:_)=x			

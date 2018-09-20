@@ -1,2 +1,0 @@
-q (x:xs) e=q xs x:e
-q(x:[])e=x:e 
