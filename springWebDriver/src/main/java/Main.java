@@ -1,24 +1,31 @@
-import implemet.DF;
-import interfaces.DriverFactory;
+import aspects.AspectInit;
+import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import pages.KMPage;
-import pages.P;
-
-import java.io.File;
-
+@Configurable
 public class Main {
 
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context=new AnnotationConfigApplicationContext();
+//        ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(AppConfig.class);
         context.scan("implemet");
         context.scan("pages");
+        context.scan("aspects");
         context.refresh();
-        KMPage   km= (KMPage)context.getBean(KMPage.class);
+//        AspectInit a = (AspectInit) context.getBean(AspectInit.class);
+//       a.pointget();
+        KMPage km = (KMPage) context.getBean("KMPage",KMPage.class);
+//        KMPage km =  context.getBean(KMPage.class);
         km.get();
-        P p=(P)context.getBean("P");
-        System.out.println(p.getUrl());
+        WebElement w = km.search;
+//        System.out.println(km.search);
+//        P p=(P)context.getBean("P");
+//        System.out.println(p.getUrl());
     }
 }

@@ -1,19 +1,17 @@
 package implemet;
 
 import interfaces.DriverFactory;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component
-@Scope("prototype")
+@Component("DF")
+@Scope("singleton")
 public class DF implements DriverFactory {
+    WebDriver driver;
     public DF() {
     }
 
@@ -34,6 +32,17 @@ public class DF implements DriverFactory {
 //        WebDriver driver = new FirefoxDriver(d);
         WebDriver driver = new HtmlUnitDriver();
 //        WebDriver driver = new ChromeDriver();
+        this.driver=driver;
         return driver;
+    }
+
+    public By by(String x) {
+        return By.xpath(x);
+    }
+//    public WebElement find(String x){
+//        return driver.findElement(by(x));
+//    }
+    public By find(String x){
+        return By.xpath(x);
     }
 }
