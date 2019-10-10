@@ -24,7 +24,7 @@ public class Main {
 //        KMPage km =  context.getBean(KMPage.class);
         km.get();
         WebElement w = km.search;
-//        System.out.println(km.search);
+        System.out.println(km.search);
 //        P p=(P)context.getBean("P");
 //        System.out.println(p.getUrl());
     }

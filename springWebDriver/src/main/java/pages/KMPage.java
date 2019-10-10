@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 
 @Component("KMPage")
 //@Scope("prototype")
-//@Lazy
+@Lazy
 public class KMPage
         extends BP
 {

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 //@AspectJAutoProxy
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class AspectInit {
-//    @Pointcut("get(* @FindBy)")
+//    @Pointcut("get(* *) && @annotation(org.openqa.selenium.support.FindBy)")
 //    public  void pointinit(){
 //    }
 //    @Before("pointinit()")
