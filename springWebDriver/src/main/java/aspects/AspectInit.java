@@ -26,7 +26,23 @@ public class AspectInit {
     }
     @Before("pointget()")
     public void initget(JoinPoint joinPoint){
-        System.out.println(joinPoint.getTarget().getClass().getSimpleName());
+        System.out.println("222222");
+    }
+
+   @Pointcut("execution(public void *.Main.main(String[]))")
+    public  void pointMain(){
+    }
+    @Before("pointMain()")
+    public void initMain(JoinPoint joinPoint){
+        System.out.println("pointMain");
+    }
+
+    @Pointcut("execution(public * pages.KMPage.get())")
+    public  void pointKMPageGet(){
+    }
+    @Before("pointKMPageGet()")
+    public void initpointKMPageGet(JoinPoint joinPoint){
+        System.out.println("pointKMPageGet");
     }
     @Pointcut("execution(public * *(..))")
     public  void pub(){
