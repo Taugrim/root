@@ -3,6 +3,7 @@ package pages;
 import implemet.DF;
 import interfaces.DriverFactory;
 import interfaces.Post;
+import org.apache.logging.log4j.Level;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
 //@Scope("prototype")
 @Lazy
 public class KMPage extends BP {
+
     @Value("${url}")
     String url;
     @Lazy
@@ -28,10 +30,9 @@ public class KMPage extends BP {
     }
 
     public void get() {
+        log.info("construct KMPage");
         driver.get(url);
 //        System.out.println(driver.getPageSource());
         System.out.println("KM get");
     }
-//    @Post
-//    public void init(){}
 }

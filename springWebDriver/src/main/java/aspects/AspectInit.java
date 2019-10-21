@@ -63,15 +63,16 @@ public class AspectInit {
     @AfterReturning("fooMethodPointcut()")
     public void afterReturningFooMethod(){
     }
-    @Pointcut("@annotation(javax.annotation.PostConstruct)")
-    public  void poinPostConstruct(){
-    }
-    @After("@annotation(interfaces.Post)")
+//    @Pointcut("@annotation(javax.annotation.PostConstruct)")
+//    public  void poinPostConstruct(){
+//    }
+//    @After("@annotation(interfaces.Post)")
+//    @After("@annotation(interfaces.Post)")
 //    @After("poinPostConstruct()")
-    public void afterPostConstruct(JoinPoint joinPoint){
-        System.out.println( joinPoint.getTarget().getClass().getSimpleName()+"   zzzzzzzzzz");
+//    public void afterPostConstruct(JoinPoint joinPoint){
+//        System.out.println( joinPoint.getTarget().getClass().getSimpleName()+"   zzzzzzzzzz");
 //        = LogManager.getLogger( joinPoint.getTarget().getClass() );
-    }
+//    }
 
 
 }

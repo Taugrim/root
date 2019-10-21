@@ -18,6 +18,12 @@ import javax.annotation.PostConstruct;
 //@Scope("prototype")
 class BP implements BasePage {
     Logger log;
+
+    public BP() {
+        log=  LogManager.getLogger(this.getClass() );
+
+    }
+
     protected WebDriver driver;
     @Autowired
     DF driverFactory;
@@ -29,8 +35,6 @@ class BP implements BasePage {
     }
     public void set(DriverFactory driverFactory) {
         this.driver = DF.getDriver();
-//        this.driver = driverFactory.getDriver();
-//        PageFactory.initElements(new DefaultFieldDecorator( new DefaultElementLocatorFactory(driver)), this);
     }
 
     public void setLog(Logger log) {
