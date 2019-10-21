@@ -3,37 +3,35 @@ package pages;
 import implemet.DF;
 import interfaces.BasePage;
 import interfaces.DriverFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.impl.SimpleLog;
-import org.openqa.selenium.By;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
+import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
-import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementLocatorFactory;
+import javax.annotation.PostConstruct;
 
-//@Component
+@Component
 //@Scope("prototype")
 class BP implements BasePage {
-Log log=new SimpleLog("hgkh");
+    Logger log;
     protected WebDriver driver;
+    @Autowired
+    DF driverFactory;
 
-//    public BP(DriverFactory driverFactory) {
-//        this.driver = driverFactory.getDriver();
-//        PageFactory.initElements(new HtmlElementDecorator( new HtmlElementLocatorFactory(driver)), this);
-
-//    }
-
+    @PostConstruct
+    public void init(){
+        this.driver = driverFactory.getDriver();
+        PageFactory.initElements(new DefaultFieldDecorator( new DefaultElementLocatorFactory(driver)), this);
+    }
     public void set(DriverFactory driverFactory) {
         this.driver = driverFactory.getDriver();
-//        PageFactory.initElements(new HtmlElementDecorator( new HtmlElementLocatorFactory(driver)), this);
+//        PageFactory.initElements(new DefaultFieldDecorator( new DefaultElementLocatorFactory(driver)), this);
     }
-//    @Value("DriverFactory")
-//    public void init(DriverFactory driverFactory) {
-//        this.driver = driverFactory.getDriver();
-//        PageFactory.initElements(new HtmlElementDecorator( new HtmlElementLocatorFactory(driver)), this);
-//    }
+
+    public void setLog(Logger log) {
+        this.log = log;
+    }
 }

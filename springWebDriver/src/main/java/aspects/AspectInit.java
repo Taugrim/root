@@ -1,26 +1,20 @@
 package aspects;
 
+import interfaces.BasePage;
+import org.apache.logging.log4j.LogManager;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.aop.config.*;
 import org.springframework.stereotype.Component;
+import testFrame.BaseTest;
 
 @Aspect
 @Component("aspect")
 //@AspectJAutoProxy
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class AspectInit {
-//    @Pointcut("get(* *) && @annotation(org.openqa.selenium.support.FindBy)")
-//    public  void pointinit(){
-//    }
-//    @Before("pointinit()")
-//    public void init(JoinPoint joinPoint){
-//        System.out.println(joinPoint.getTarget().getClass().getSimpleName());
-//    }
+
     @Pointcut("execution(* *.get(..))")
     public  void pointget(){
     }
@@ -54,17 +48,7 @@ public class AspectInit {
     @Pointcut("execution(* pages.*.*(..))")
     public  void p1(){
     }
-//    @Before("p1()")
-//    public void asp1(JoinPoint joinPoint){
-//
-//        System.out.println(joinPoint.getTarget().getClass().getSimpleName());
-//    }
-//    @AfterReturning(pointcut = "asp1", returning = "result")
-//    public void stepStop(JoinPoint joinPoint, Object result) {
-//        System.out.println("AfterReturning");
-//    }
-
-    @Pointcut("execution(public void  pages.KMPage.get())")
+   @Pointcut("execution(public void  pages.KMPage.get())")
     private void fooMethodPointcut(){
 
     }
@@ -79,4 +63,15 @@ public class AspectInit {
     @AfterReturning("fooMethodPointcut()")
     public void afterReturningFooMethod(){
     }
+    @Pointcut("@annotation(javax.annotation.PostConstruct)")
+    public  void poinPostConstruct(){
+    }
+    @After("@annotation(interfaces.Post)")
+//    @After("poinPostConstruct()")
+    public void afterPostConstruct(JoinPoint joinPoint){
+        System.out.println( joinPoint.getTarget().getClass().getSimpleName()+"   zzzzzzzzzz");
+//        = LogManager.getLogger( joinPoint.getTarget().getClass() );
+    }
+
+
 }
