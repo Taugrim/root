@@ -23,7 +23,7 @@ public class AppConfig {
     private Environment environment;
 
     @Bean()
-    public DriverFactory driverFactory() {
+    public DF driverFactory() {
         return new DF();
     }
 
@@ -31,8 +31,4 @@ public class AppConfig {
     @Qualifier("By")
     public By by;
 
-    @Bean
-    public DriverFactory getDriverFactory() {
-        return new DF();
-    }
 }

@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 @Component("DF")
 @Scope("singleton")
-public class DF implements DriverFactory {
+public class DF
+//        implements DriverFactory
+{
     WebDriver driver;
     public DF() {
     }
@@ -19,8 +21,8 @@ public class DF implements DriverFactory {
         this.path = path;
     }
 
-    String path="C:\\gitTaugrim\\root\\springWebDriver\\src\\main\\resources\\chromedriver.exe";
-    public WebDriver getDriver() {
+    static String path="C:\\gitTaugrim\\root\\springWebDriver\\src\\main\\resources\\chromedriver.exe";
+    public static WebDriver getDriver() {
 //        FirefoxOptions options = new FirefoxOptions();
 //        DesiredCapabilities d = new DesiredCapabilities();
 //        d.setCapability("marionette", false);
@@ -32,7 +34,7 @@ public class DF implements DriverFactory {
 //        WebDriver driver = new FirefoxDriver(d);
         WebDriver driver = new HtmlUnitDriver();
 //        WebDriver driver = new ChromeDriver();
-        this.driver=driver;
+//        this.driver=driver;
         return driver;
     }
 

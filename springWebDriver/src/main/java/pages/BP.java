@@ -1,6 +1,7 @@
 package pages;
 
 import implemet.DF;
+import implemet.PF;
 import interfaces.BasePage;
 import interfaces.DriverFactory;
 import org.apache.logging.log4j.LogManager;
@@ -24,10 +25,11 @@ class BP implements BasePage {
     @PostConstruct
     public void init(){
         this.driver = driverFactory.getDriver();
-        PageFactory.initElements(new DefaultFieldDecorator( new DefaultElementLocatorFactory(driver)), this);
+        PF.initElements( this);
     }
     public void set(DriverFactory driverFactory) {
-        this.driver = driverFactory.getDriver();
+        this.driver = DF.getDriver();
+//        this.driver = driverFactory.getDriver();
 //        PageFactory.initElements(new DefaultFieldDecorator( new DefaultElementLocatorFactory(driver)), this);
     }
 

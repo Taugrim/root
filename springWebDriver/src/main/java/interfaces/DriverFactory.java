@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 public interface DriverFactory {
-    public WebDriver getDriver();
+//    public static WebDriver getDriver();
     public By by(String x);
 }
