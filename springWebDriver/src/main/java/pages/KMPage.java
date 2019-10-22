@@ -1,16 +1,14 @@
 package pages;
 
-import implemet.DF;
-import interfaces.DriverFactory;
-import interfaces.Post;
-import org.apache.logging.log4j.Level;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import ru.yandex.qatools.htmlelements.element.HtmlElement;
+import ru.yandex.qatools.htmlelements.element.TextInput;
+import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 import tools.Config;
 
 import javax.annotation.PostConstruct;
@@ -19,12 +17,15 @@ import javax.annotation.PostConstruct;
 //@Scope("prototype")
 @Lazy
 public class KMPage extends BP {
+//    public KMPage() {
+//        HtmlElementLoader.populatePageObject(this, driverFactory.getDriver());
+//    }
 
     @Value("${url}")
     String url;
     @Lazy
     @FindBy(xpath = ".//*[@id='title_header']//*[@class='searchtag']")
-    public WebElement search;
+    public TextInput search;
     public void setUrl(String url) {
         this.url = url;
     }

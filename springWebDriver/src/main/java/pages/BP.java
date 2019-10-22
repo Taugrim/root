@@ -12,11 +12,13 @@ import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.yandex.qatools.htmlelements.element.HtmlElement;
+
 import javax.annotation.PostConstruct;
 
 @Component
 //@Scope("prototype")
-class BP implements BasePage {
+class BP extends HtmlElement implements BasePage  {
     Logger log;
 
     public BP() {
