@@ -5,27 +5,25 @@ import java.util.concurrent.Exchanger;
 
 public class Producer implements Runnable {
     Qeue qeue;
-    Exchanger<Boolean> prodEx;
+    Exchanger<Integer> prodEx;
 
-    public Producer(Qeue qeue, Exchanger<Boolean> prodEx) {
-        this.qeue = qeue;
+    public Producer( Exchanger<Integer> prodEx) {
+
+
         this.prodEx = prodEx;
     }
-
     @Override
     public void run() {
+        System.out.println("Producer ");
         while (true) {
-            try {
-                if (prodEx.exchange(true)) {
-
-                    Thread.currentThread().wait();
-                }
+            try {int i = new Random().nextInt();
+                System.out.println("Producer " + i);
+                prodEx.exchange(i);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Producer " +  e.getMessage());
             }
-            int i = new Random().nextInt();
-            System.out.println("Producer " + i);
-            qeue.addLast(i);
+
+
         }
     }
 }

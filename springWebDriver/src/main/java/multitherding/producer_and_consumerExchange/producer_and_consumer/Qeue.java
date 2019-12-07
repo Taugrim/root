@@ -5,47 +5,42 @@ import java.util.Queue;
 import java.util.concurrent.Exchanger;
 
 
-public class Qeue {
+public class Qeue implements Runnable {
     private final int size;
     Queue<Integer> q;
-    Exchanger<Boolean> consEx;
-    Exchanger<Boolean> prodEx;
+    Exchanger<Integer> consEx;
+    Exchanger<Integer> prodEx;
 
-    Qeue(int size, Exchanger<Boolean> consEx, Exchanger<Boolean> prodEx) {
+    Qeue(int size) {
+        System.out.println("Qeue ");
+//    Qeue(int size,Exchanger<Integer> consEx, Exchanger<Integer> prodEx ) {
         q = new LinkedList<>();
         this.size = size;
-        this.consEx = consEx;
-        this.prodEx = prodEx;
+
     }
 
-    public void addLast(int i) {
-        notifyAll();
-        if (q.size() >= size) {
-            try {
-                prodEx.exchange(false);
-                System.out.println("wait addLast");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            q.offer(i);
-            System.out.println("add " + i);
-        }
-    }
 
-    public Integer getFirst() {
-        notifyAll();
-        Integer ii = q.poll();
-        if (ii == null) {
+    @Override
+    public void run() {
+        System.out.println("Q " );
+        while (true) {
+            System.out.println("Q 2" );
             try {
-               consEx.exchange(false);
-                System.out.println("wait getFirst");
+                if (q.size() < size) {
+                    Integer i=prodEx.exchange(null);
+                    System.out.println("prod  "+i);
+                    q.offer(i);
+                }
+
+
+                if (q.size() != 0) {
+                    consEx.exchange(q.poll());
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println("return " + ii);
-        return ii;
     }
 
 }
+

@@ -3,27 +3,28 @@ package multitherding.producer_and_consumerExchange.producer_and_consumer;
 import java.util.concurrent.Exchanger;
 
 public class Consumer implements Runnable {
-    Qeue qeue;
-    Exchanger<Boolean> consEx;
 
-    public Consumer(Qeue qeue, Exchanger<Boolean> consEx) {
+    Exchanger<Integer> consEx;
 
-        this.qeue = qeue;
+    public Consumer( Exchanger<Integer> consEx) {
+
+
         this.consEx = consEx;
     }
 
     @Override
     public void run() {
+        System.out.println("Consumer  ");
+
+
         while (true) {
             try {
-                if (consEx.exchange(true)) {
+                System.out.println("Consumer  " +   consEx.exchange(null));
 
-                    Thread.currentThread().wait();
-                }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Consumer  "+e.getMessage());
             }
-            System.out.println("Consumer  " + qeue.getFirst());
+
         }
     }
 }
