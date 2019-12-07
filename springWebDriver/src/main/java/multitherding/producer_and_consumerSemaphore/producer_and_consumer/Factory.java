@@ -12,7 +12,8 @@ public class Factory {
     Semaphore consSem;
 
     public Factory(int s) {
-
+        Semaphore prodSem=new Semaphore(1);
+        Semaphore consSem=new Semaphore(1);
         this.qeue = new Qeue(s,prodSem,consSem);
 //this.prodSem
     }

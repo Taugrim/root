@@ -20,18 +20,20 @@ public class Qeue {
     }
 
     public void addLast(int i) {
+        try {   prodSem.acquire();
+            if (q.size() <= size) {
 
-        if (q.size() >= size) {
-            try { prodSem.acquire();
+
                 System.out.println("wait addLast");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-        } else { prodSem.release(q.size());
-            q.offer(i);
-            System.out.println("add " + i);
+            q.offer(i);  System.out.println("add " + i);
         }
+            prodSem.release();
+
+
+         } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
     }
 
     public Integer getFirst() {
@@ -45,7 +47,7 @@ public class Qeue {
                 e.printStackTrace();
             }
 
-        consSem.release(q.size());
+        consSem.release();
         System.out.println("return " + ii);
         return ii;
     }
