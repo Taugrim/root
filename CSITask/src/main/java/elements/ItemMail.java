@@ -7,7 +7,7 @@ import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 public class ItemMail extends TypifiedElement {
 
-    protected ItemMail(WebElement wrappedElement) {
+    public ItemMail(WebElement wrappedElement) {
         super(wrappedElement);
     }
 
@@ -19,8 +19,9 @@ public class ItemMail extends TypifiedElement {
     }
     public String getTextSnippet(){
         return getWrappedElement().findElement(By.xpath("//*[@class='MailListItem-snippet-25']")).getAttribute("title");}
-    public String getSender(){
-       return getWrappedElement().findElement(By.xpath("//*[@class='MailListItem-star-Sl']")).getAttribute("title");
+
+        public String getSender(){
+       return getWrappedElement().findElement(By.xpath("//*[@class='MailListItem-sender-1G']")).getAttribute("title");
     }
     public String getDate(){
        return getWrappedElement().findElement(By.xpath("//*[@class='MailListItem-date-hq']")).getAttribute("title");

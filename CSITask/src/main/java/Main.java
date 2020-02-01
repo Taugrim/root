@@ -1,5 +1,6 @@
 import com.gargoylesoftware.htmlunit.WebClient;
 import helpers.EmailHelper;
+import objects.Message;
 import objects.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,37 +9,23 @@ import tools.DF;
 
 public class Main {
     public static void main(String[] args) {
-//        WebDriver wd=DF.getDriver();
-//        wd.get("km.ru");
-
-//        wd.get("https://www.rambler.ru/");
-//        wd.findElement(By.xpath(".//*[@name=\"email\"]")).sendKeys("");
-//        wd.findElement(By.xpath(".//*[@data-cerber-head=\"logbtn\"]")).click();
-//        wd.findElement(By.xpath(".//*[@name=\"password\"]")).sendKeys("");
-//        wd.findElement(By.xpath(".//*[@data-cerber-head=\"pasbtn\"]")).click();
-//
-//        wd.findElement(By.xpath(".//*[@data-cerber-head=\"main::mail::w::inbox\"]")).click();
-
-
-        //list mails //*[@class='MailList-list-2L']//*[@draggable]"
-        //checkbox //*[@class='MailListItem-checkbox-1q']
-        //star //*[@class='MailListItem-star-Sl']
-        //sender //*[@class='MailListItem-star-Sl'] @title
-        //snipet //*[@class='MailListItem-snippet-25'] @title
-        //snipet //*[@class='MailListItem-date-hq'] @title
-
-
-
-        // user //*[@data-cerber-topline='user::id']
-        // user data-cerber-topline="user::id::logout"
-//        wd.get("mockPages/home.html");
-//        System.out.println(wd.getPageSource());
-
         User user=new User();
         user.email="";
         user.password="";
+        Message message=new Message();
+        message.snippetSender="Stepik Team";
+        message.snippet="Рекомендуемые курсы на Stepik";
+        message.text="Мы хотели бы порекомендовать вам некоторые курсы на ";
+        message.theme="Рекомендуемые курсы на Stepik";
         EmailHelper emailHelper=new EmailHelper();
         emailHelper.open();
         emailHelper.login(user);
+        Message m= emailHelper.getMessage(message);
+        m.theme.equals(message.theme);
+        m.text.contains(message.text);
+        emailHelper.logout();
+        emailHelper.close();
+
+
     }
 }

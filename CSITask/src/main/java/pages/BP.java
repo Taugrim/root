@@ -12,13 +12,11 @@ import tools.DF;
 
 
 class BP  {
-    Logger log;
+
     private WebDriver driver;
     public BP() {
-        log=  LogManager.getLogger(this.getClass() );
         init();
         HtmlElementLoader.populatePageObject(this, driver);
-        PageFactory.initElements(new HtmlElementDecorator(new HtmlElementLocatorFactory(driver)), this);
     }
 
 

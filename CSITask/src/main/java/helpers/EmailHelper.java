@@ -4,6 +4,8 @@ import elements.ItemMail;
 import objects.Message;
 import objects.User;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.HomePage;
 import pages.MailPage;
 import pages.MessagePage;
@@ -11,9 +13,9 @@ import tools.DF;
 
 public class EmailHelper {
     WebDriver wd;
-    HomePage homePage;
-    MailPage mailPage;
-    MessagePage messagePage;
+    public HomePage homePage;
+    public MailPage mailPage;
+    public MessagePage messagePage;
     public EmailHelper(){
         this.wd= DF.getDriver();
         this.homePage=new HomePage();
@@ -33,7 +35,7 @@ public class EmailHelper {
 
     public ItemMail findMessage(Message message){
         return mailPage.itemMailList.stream().
-                filter(q->q.getSender().equals(message.snippetSender)||q.getTextSnippet().equals(message.snippet))
+                filter(q->q.getSender().contains(message.snippetSender)||q.getTextSnippet().equals(message.snippet))
                 .findAny().orElse(null);
     }
     public Message getMessage(Message message){
@@ -45,6 +47,10 @@ public class EmailHelper {
     }
     public void logout(){
         mailPage.user.click();
-        mailPage.user.click();
+        WebDriverWait wait = new WebDriverWait(wd, 5);
+        wait.until(ExpectedConditions.elementToBeClickable(mailPage.logout)).click();
+    }
+    public void close(){
+        wd.close();
     }
 }
