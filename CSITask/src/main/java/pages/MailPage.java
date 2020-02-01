@@ -8,21 +8,21 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 import java.util.List;
 
 public class MailPage extends BP{
-     //list mails //*[@class='MailList-list-2L']//*[@draggable]"
+
 
      @FindBy(xpath = "//*[@class='MailList-list-2L']//*[@draggable]")
-     TextInput email;
+     public  TextInput email;
      @FindBy(xpath = ".//*[@data-cerber-head=\"logbtn\"]")
-     Button logbtn;
+     public   Button logbtn;
      @FindBy(xpath = ".//*[@name=\"password\"]")
-     TextInput password;
+     public   TextInput password;
      @FindBy(xpath = ".//*[@data-cerber-head=\"pasbtn\"]")
-     Button pasbtn;
+     public   Button pasbtn;
      @FindBy(xpath = ".//*[@data-cerber-head=\"main::mail::w::inbox\"]")
-     Button inbox;
+     public   Button inbox;
      @FindBy(xpath = ".//*[@data-cerber-topline='user::id']")
-     Button user;
+     public   Button user;
      @FindBy(xpath = ".//*[@class='MailList-list-2L']//*[@draggable]")
-     List<ItemMail> itemMailList;
+     public    List<ItemMail> itemMailList;
 
 }

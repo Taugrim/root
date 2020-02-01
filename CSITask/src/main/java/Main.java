@@ -1,4 +1,6 @@
 import com.gargoylesoftware.htmlunit.WebClient;
+import helpers.EmailHelper;
+import objects.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -6,16 +8,16 @@ import tools.DF;
 
 public class Main {
     public static void main(String[] args) {
-        WebDriver wd=DF.getDriver();
+//        WebDriver wd=DF.getDriver();
 //        wd.get("km.ru");
 
-        wd.get("https://www.rambler.ru/");
-        wd.findElement(By.xpath(".//*[@name=\"email\"]")).sendKeys("");
-        wd.findElement(By.xpath(".//*[@data-cerber-head=\"logbtn\"]")).click();
-        wd.findElement(By.xpath(".//*[@name=\"password\"]")).sendKeys("");
-        wd.findElement(By.xpath(".//*[@data-cerber-head=\"pasbtn\"]")).click();
-
-        wd.findElement(By.xpath(".//*[@data-cerber-head=\"main::mail::w::inbox\"]")).click();
+//        wd.get("https://www.rambler.ru/");
+//        wd.findElement(By.xpath(".//*[@name=\"email\"]")).sendKeys("");
+//        wd.findElement(By.xpath(".//*[@data-cerber-head=\"logbtn\"]")).click();
+//        wd.findElement(By.xpath(".//*[@name=\"password\"]")).sendKeys("");
+//        wd.findElement(By.xpath(".//*[@data-cerber-head=\"pasbtn\"]")).click();
+//
+//        wd.findElement(By.xpath(".//*[@data-cerber-head=\"main::mail::w::inbox\"]")).click();
 
 
         //list mails //*[@class='MailList-list-2L']//*[@draggable]"
@@ -30,6 +32,13 @@ public class Main {
         // user //*[@data-cerber-topline='user::id']
         // user data-cerber-topline="user::id::logout"
 //        wd.get("mockPages/home.html");
-        System.out.println(wd.getPageSource());
+//        System.out.println(wd.getPageSource());
+
+        User user=new User();
+        user.email="";
+        user.password="";
+        EmailHelper emailHelper=new EmailHelper();
+        emailHelper.open();
+        emailHelper.login(user);
     }
 }

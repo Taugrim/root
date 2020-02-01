@@ -7,13 +7,13 @@ import ru.yandex.qatools.htmlelements.element.TextInput;
 public class HomePage extends BP{
 
      @FindBy(xpath = ".//*[@name=\"email\"]")
-     TextInput email;
+     public TextInput email;
      @FindBy(xpath = ".//*[@data-cerber-head=\"logbtn\"]")
-     Button logbtn;
+     public  Button logbtn;
      @FindBy(xpath = ".//*[@name=\"password\"]")
-     TextInput password;
+     public   TextInput password;
      @FindBy(xpath = ".//*[@data-cerber-head=\"pasbtn\"]")
-     Button pasbtn;
+     public   Button pasbtn;
      @FindBy(xpath = ".//*[@data-cerber-head=\"main::mail::w::inbox\"]")
-     Button inbox;
+     public   Button inbox;
 }
