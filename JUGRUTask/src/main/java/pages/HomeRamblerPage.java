@@ -4,7 +4,7 @@ import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
-public class HomePage extends BP{
+public class HomeRamblerPage extends BP{
 
      @FindBy(xpath = ".//*[@name=\"email\"]")
      public TextInput email;
