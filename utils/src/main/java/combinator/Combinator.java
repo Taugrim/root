@@ -2,10 +2,10 @@ package combinator;
 
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 
 public class Combinator {
@@ -26,11 +26,21 @@ public class Combinator {
                 fabric("a", List.of("a1")),
                 fabric("q", List.of("q1", "q2")),
                 fabric("w", List.of("w1", "w2")),
-                fabric("e", List.of("e1", "e2","e3","e4")),
+                fabric("e", List.of("e1", "e2", "e3", "e4")),
                 fabric("r", List.of("r1"))
         )));
 
-        combinationsPairWise(l
+        combinationsSliser(l
+        ).forEach(q -> System.out.println(q.entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
+        Deque<Deque<Map.Entry<String, String>>> ll = new LinkedList();
+        ll.addAll((List.of(
+                fabric("a", List.of("a1")),
+                fabric("q", List.of("q1", "q2")),
+                fabric("w", List.of("w1", "w2")),
+                fabric("e", List.of("e1", "e2", "e3", "e4")),
+                fabric("r", List.of("r1"))
+        )));
+        pairWiseList(ll
         ).forEach(q -> System.out.println(q.entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
     }
 
@@ -110,27 +120,78 @@ public class Combinator {
 
     }
 
-    public static <T, V> List<Map<T, V>> combinationsPairWise(Deque<Deque<Map.Entry<T, V>>> first) {
+    public static <T, V> List<Map<T, V>> combinationsSliser(Deque<Deque<Map.Entry<T, V>>> first) {
         ;
-        return pairWise(first, new LinkedList<>(), new ArrayList<Map<T, V>>(), new HashMap<T, V>());
+        return sliser(first, new LinkedList<>(), new ArrayList<Map<T, V>>(), new HashMap<T, V>());
 
     }
 
-    public static <T, V> List<Map<T, V>> pairWise(Deque<Deque<Map.Entry<T, V>>> first, Deque<Deque<Map.Entry<T, V>>> last, List<Map<T, V>> acc, Map<T, V> map) {
+    public static <T, V> List<Map<T, V>> pairWiseList(Deque<Deque<Map.Entry<T, V>>> entryList) {
+        return pairWise(entryList.poll(), entryList, new ArrayList<>());
+    }
+
+    public static <T, V> List<Map<T, V>> pairWise(Deque<Map.Entry<T, V>> first,
+                                                  Deque<Deque<Map.Entry<T, V>>> queue,
+                                                  List<Map.Entry<Map.Entry<T, V>, Map.Entry<T, V>>> pair) {
+        Queue<Map.Entry<T, V>> second = queue.peek();
+        if (second != null && second.size() == 0) {
+            queue.poll();
+        }
+        return queue.size() == 0 ?
+                addList(pair, first) :
+                first.size() == 0 ?
+                        pairWise(queue.poll(), queue, pair) :
+                        pairWise(queue.poll(), ((Supplier<Deque<Deque<Map.Entry<T, V>>>>) () -> {
+                                    if (first.size() != 0) {
+                                        queue.addLast(first);
+                                    }
+                                    if (second.size() == 0) {
+                                        queue.poll();
+                                    }
+                                    return queue;
+                                }).get(),
+                                ((Supplier<List<Map.Entry<Map.Entry<T, V>, Map.Entry<T, V>>>>) () ->
+                                {
+                                    Map.Entry<T, V> paiFirst = first.poll();
+                                    Map.Entry<T, V> paiSecond = second.poll();
+                                    if (first.size() == 0) {
+                                        queue.pollLast();
+                                    }
+                                    if (paiFirst != null || paiSecond != null) {
+                                        pair.add(Map.entry(paiFirst, paiSecond));
+                                    }
+                                    return pair;
+                                }).get());
+    }
+
+    private static <V, T> List<Map<T, V>> addList(
+            List<Map.Entry<Map.Entry<T, V>, Map.Entry<T, V>>> pair,
+            Deque<Map.Entry<T, V>> first) {
+
+        List<Map<T, V>> lm = pair.stream().map(q -> Map.ofEntries(q.getKey(), q.getValue())).collect(toList());
+        if (first != null) {
+            List<Map<T, V>>l = first.stream().map(q->Map.ofEntries(q)).collect(toList());
+
+            lm.addAll(l);
+        }
+        return lm;
+    }
+
+    public static <T, V> List<Map<T, V>> sliser(Deque<Deque<Map.Entry<T, V>>> first, Deque<Deque<Map.Entry<T, V>>> last, List<Map<T, V>> acc, Map<T, V> map) {
         List<Map<T, V>> res = Collections.emptyList();
         if (first.isEmpty() && last.isEmpty()) {
             acc.add(map);
             res = acc;
         } else if (first.isEmpty()) {
             acc.add(map);
-            res = pairWise(last, first, acc, new HashMap<>());
+            res = sliser(last, first, acc, new HashMap<>());
         } else {
             Deque<Map.Entry<T, V>> deq = first.pollFirst();
             Map.Entry<T, V> en = deq.pollFirst();
             map.put(en.getKey(), en.getValue());
             res = en == null ?
-                    pairWise(first, last, acc, map) :
-                    pairWise(first, addDeque(deq, last), acc, map)
+                    sliser(first, last, acc, map) :
+                    sliser(first, addDeque(deq, last), acc, map)
             ;
         }
         return res;
