@@ -1,9 +1,14 @@
 package combinator;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
+import org.jsoup.Jsoup;
+import org.jsoup.helper.W3CDom;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -18,6 +23,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.*;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.*;
@@ -27,6 +33,25 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class XML {
+    public static ObjectNode documentToJsonNode(Document document){
+
+        try {
+            return new XmlMapper().readValue(getStringFromDocument(document).getBytes(),ObjectNode.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+        public static String jsonNodeToString(ObjectNode objectNode){
+
+        try {
+            return new JsonMapper().writeValueAsString(objectNode);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     /**
      * разделяеть xpath на имена нод работает на абсолютном и отностильном пути
      *
@@ -39,7 +64,6 @@ public class XML {
                 .filter(q -> !q.getKey().equals(""))
                 .collect(Collectors.toList());
     }
-
     public static String getTextNode(Document document, String param, int i) {
         return document.getDocumentElement().getElementsByTagName(param).getLength() == 0 ? null
                 : document.getDocumentElement().getElementsByTagName(param).item(i).getTextContent().equals("") ? null
