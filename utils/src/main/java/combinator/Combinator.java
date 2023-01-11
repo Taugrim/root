@@ -10,14 +10,14 @@ import static java.util.stream.Collectors.*;
 
 public class Combinator {
     public static void main(String[] args) {
-        combinations(List.of(
+        combinationsUUID(List.of(
                         fabric("a", List.of("a1")),
                         fabric("q", List.of("q1", "q2")),
                         fabric("w", List.of("w1", "w2", "w3")),
                         fabric("e", List.of("e1", "e2")),
                         fabric("r", List.of("r1"))
                 )
-        ).forEach(q -> System.out.println(q.entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
+        ).forEach(q -> System.out.println(q.getKey()+"  "+q.getValue().entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
         System.out.println("");
         System.out.println("");
         System.out.println("");
@@ -30,8 +30,11 @@ public class Combinator {
                 fabric("r", List.of("r1"))
         )));
 
-        combinationsSliser(l
-        ).forEach(q -> System.out.println(q.entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
+        combinationsSliserUUID(l
+        ).forEach(q -> System.out.println(q.getKey()+"  "+q.getValue().entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
         Deque<Deque<Map.Entry<String, String>>> ll = new LinkedList();
         ll.addAll((List.of(
                 fabric("a", List.of("a1")),
@@ -40,8 +43,8 @@ public class Combinator {
                 fabric("e", List.of("e1", "e2", "e3", "e4")),
                 fabric("r", List.of("r1"))
         )));
-        pairWiseList(ll
-        ).forEach(q -> System.out.println(q.entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
+        pairWiseListUUID(ll
+        ).forEach(q -> System.out.println(q.getKey()+"  "+q.getValue().entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
     }
 
     /**
@@ -112,6 +115,9 @@ public class Combinator {
         return first.stream().flatMap(q -> addOneEntryToListMapEntry(q, last).stream()).collect(toList());
     }
 
+    public static <T, V> List<Map.Entry<UUID, Map<T, V>>> combinationsUUID(List<List<Map.Entry<T, V>>> first) {
+        return combinations(first).stream().map(q-> Map.entry(UUID.randomUUID(),q)).collect(toList());
+    }
     public static <T, V> List<Map<T, V>> combinations(List<List<Map.Entry<T, V>>> first) {
         return first.isEmpty() ? Collections.EMPTY_LIST
                 : first.size() == 1 ? Collections.singletonList(listEntriesToMap(first.get(0)))
@@ -120,12 +126,18 @@ public class Combinator {
 
     }
 
+    public static <T, V> List<Map.Entry<UUID, Map<T, V>>> combinationsSliserUUID(Deque<Deque<Map.Entry<T, V>>> first) {
+        return combinationsSliser(first).stream().map(q-> Map.entry(UUID.randomUUID(),q)).collect(toList());
+    }
     public static <T, V> List<Map<T, V>> combinationsSliser(Deque<Deque<Map.Entry<T, V>>> first) {
         ;
         return sliser(first, new LinkedList<>(), new ArrayList<Map<T, V>>(), new HashMap<T, V>());
 
     }
 
+    public static <T, V> List<Map.Entry<UUID, Map<T, V>>> pairWiseListUUID(Deque<Deque<Map.Entry<T, V>>> entryList) {
+        return pairWiseList(entryList).stream().map(q-> Map.entry(UUID.randomUUID(),q)).collect(toList());
+    }
     public static <T, V> List<Map<T, V>> pairWiseList(Deque<Deque<Map.Entry<T, V>>> entryList) {
         return pairWise(entryList.poll(), entryList, new ArrayList<>());
     }
