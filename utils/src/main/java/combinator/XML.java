@@ -22,9 +22,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.*;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -346,7 +344,7 @@ public class XML {
 
     public static List<Node> getChildsNode(Node node) {
         NodeList nl = node.getChildNodes();
-        return IntStream.range(0, nl.getLength() - 1).mapToObj(q -> nl.item(q))
+        return IntStream.range(0, nl.getLength() ).mapToObj(q -> nl.item(q))
                 .filter(q -> !q.getNodeName().equals("#text"))
                 .collect(Collectors.toList());
     }
@@ -365,13 +363,14 @@ public class XML {
         return lis;
     }
 
-    public static Set<Map.Entry<String, String>> getXpath3(Node xml) {
+
+  public static Set<Map.Entry<String, String>> getXpath3(Node xml) {
         return xml == null ? Collections.emptySet() : xml.hasChildNodes() ?
                 IntStream.range(0, xml.getChildNodes().getLength())
                         .mapToObj(q -> xml.getChildNodes().item(q))
                         .map(q -> getXpath3(q))
                         .flatMap(q -> q.stream()).collect(Collectors.toSet())
-                : Collections.emptySet();
+                : Collections.singleton(prepare3(xml));
     }
 
     public static Set<String> getXpath2(Node xml) {
@@ -380,7 +379,7 @@ public class XML {
                         .mapToObj(q -> xml.getChildNodes().item(q))
                         .map(q -> getXpath2(q))
                         .flatMap(q -> q.stream()).collect(Collectors.toSet())
-                : Collections.emptySet();
+                : Collections.singleton(prepare2(xml));
     }
 
     public static String prepare(Node xml) {
@@ -399,7 +398,8 @@ public class XML {
 
     public static Map.Entry<String, String> prepare3(Node xml) {
         return xml.getNodeName().equals("#document") ? Map.entry("", xml.getNodeValue()) : Map.entry(
-                prepare2(xml.getParentNode()) + "//" + xml.getNodeName() + getNodeNum(xml)
+                prepare2(xml.getParentNode()) + (xml.getNodeName().equals("#text")?"":( "//" +xml.getNodeName()
+                        + getNodeNum(xml)))
                         .replaceAll("//.{1,3}:", "//")
                         .replaceAll("//#.{0,}", ""), xml.getTextContent().replaceAll("(\n *)*", ""));
     }
@@ -412,5 +412,18 @@ public class XML {
                 .filter(i -> nodeList.get(i).equals(node))
                 .findFirst().orElse(0);
         return String.format("[%s]", num + 1);
+    }
+    public static String readFromInputStream( String file)
+            throws IOException {
+//        Path path = Paths.get(getClass().getClassLoader()
+//                .getResource("fileTest.txt").toURI());
+//
+//        Stream<String> lines = Files.lines(path);
+//        String data = lines.collect(Collectors.joining("\n"));
+//        lines.close();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String currentLine = reader.lines().collect(Collectors.joining("\n"));
+        reader.close();
+        return currentLine;
     }
 }
