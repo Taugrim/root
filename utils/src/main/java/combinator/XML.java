@@ -30,16 +30,17 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class XML {
-    public static ObjectNode documentToJObjectNode(Document document){
+    public static ObjectNode documentToJObjectNode(Document document) {
 
         try {
-            return new XmlMapper().readValue(getStringFromDocument(document).getBytes(),ObjectNode.class);
+            return new XmlMapper().readValue(getStringFromDocument(document).getBytes(), ObjectNode.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
-        public static String jsonNodeToString(ObjectNode objectNode){
+
+    public static String jsonNodeToString(ObjectNode objectNode) {
 
         try {
             return new JsonMapper().writeValueAsString(objectNode);
@@ -48,14 +49,16 @@ public class XML {
         }
 
     }
-    public static Document jsonNodeToDocument(ObjectNode objectNode){
+
+    public static Document jsonNodeToDocument(ObjectNode objectNode) {
 
         try {
-            return getDocument( new XmlMapper().writeValueAsString(objectNode));
+            return getDocument(new XmlMapper().writeValueAsString(objectNode));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
+
     /**
      * разделяеть xpath на имена нод работает на абсолютном и отностильном пути
      *
@@ -68,6 +71,7 @@ public class XML {
                 .filter(q -> !q.getKey().equals(""))
                 .collect(Collectors.toList());
     }
+
     public static String getTextNode(Document document, String param, int i) {
         return document.getDocumentElement().getElementsByTagName(param).getLength() == 0 ? null
                 : document.getDocumentElement().getElementsByTagName(param).item(i).getTextContent().equals("") ? null
@@ -153,7 +157,7 @@ public class XML {
     }
 
     public static Document getDocumentRegexValue(Document doc) {
-        Set<String> xpath = getXpath3(doc).stream().filter(q->!q.getValue().equals("")).map(q->q.getKey()).collect(Collectors.toSet());
+        Set<String> xpath = getXpath3(doc).stream().filter(q -> !q.getValue().equals("")).map(q -> q.getKey()).collect(Collectors.toSet());
         for (String xp : xpath) {
             String node = getValueNodeByXpath(doc, xp);
             if (node == null) continue;
@@ -172,10 +176,19 @@ public class XML {
         return document;
     }
 
-    public static Document replaceValueTag(Document xml, String xpath, String value) {
+    public static <T, V> Document replaceValuesTags(Document xml, List<Map.Entry<T, V>> xpathAndValue) {
         Document copy = copyDocument(xml);
-        getNodesByXpath(copy, xpath).forEach(node -> node.setTextContent(value));
+        xpathAndValue.forEach(q -> replaceValueTag(copy, q.getKey().toString(), q.getValue().toString()));
         return copy;
+    }
+
+    public static <T, V> List<Map.Entry<UUID, Document>> replaceValuesTagsUUID(Document xml, List<Map.Entry<UUID, List<Map.Entry<T, V>>>> xpathAndValue) {
+        return xpathAndValue.stream().map(q -> Map.entry(q.getKey(), replaceValuesTags(xml, q.getValue()))).collect(Collectors.toList());
+    }
+
+    public static Document replaceValueTag(Document xml, String xpath, String value) {
+        getNodesByXpath(xml, xpath).forEach(node -> node.setTextContent(value));
+        return xml;
     }
 
     private static Node getNodeByXpath(Document copy, String xpath) {
@@ -235,11 +248,12 @@ public class XML {
         return
                 filterByXpath(xpathAndValue.stream().collect(Collectors.toList()),
                         Stream.of(filterXpath.split("//"))
-                                .flatMap(q->Stream.of(q.split("/"))).collect(Collectors.toList()));
+                                .flatMap(q -> Stream.of(q.split("/"))).collect(Collectors.toList()));
 
 
     }
- public static List<Map.Entry<String, String>> filterByXpath(
+
+    public static List<Map.Entry<String, String>> filterByXpath(
             List<Map.Entry<String, String>> xpathAndValue,
             List<String> filterXpath
     ) {
@@ -259,7 +273,7 @@ public class XML {
     }
 
     private static List<Node> createNodes(List<String> names) {
-        return names.stream().map(q->(Node)createDocument().createElement(q)).collect(Collectors.toList());
+        return names.stream().map(q -> (Node) createDocument().createElement(q)).collect(Collectors.toList());
     }
 
     public static List<String> sortSiblings(String xpath, List<String> names, Document document) {
@@ -344,7 +358,7 @@ public class XML {
 
     public static List<Node> getChildsNode(Node node) {
         NodeList nl = node.getChildNodes();
-        return IntStream.range(0, nl.getLength() ).mapToObj(q -> nl.item(q))
+        return IntStream.range(0, nl.getLength()).mapToObj(q -> nl.item(q))
                 .filter(q -> !q.getNodeName().equals("#text"))
                 .collect(Collectors.toList());
     }
@@ -364,7 +378,7 @@ public class XML {
     }
 
 
-  public static Set<Map.Entry<String, String>> getXpath3(Node xml) {
+    public static Set<Map.Entry<String, String>> getXpath3(Node xml) {
         return xml == null ? Collections.emptySet() : xml.hasChildNodes() ?
                 IntStream.range(0, xml.getChildNodes().getLength())
                         .mapToObj(q -> xml.getChildNodes().item(q))
@@ -372,12 +386,15 @@ public class XML {
                         .flatMap(q -> q.stream()).collect(Collectors.toSet())
                 : Collections.singleton(prepare3(xml));
     }
-  public static List<Map.Entry<UUID, Map.Entry<String, String>>> getXpath3UUID(Node xml) {
+
+    public static List<Map.Entry<UUID, Map.Entry<String, String>>> getXpath3UUID(Node xml) {
         return addUUIDToCollection(getXpath3(xml));
     }
-    public static <T>List<Map.Entry<UUID,T>>addUUIDToCollection(Collection<T> collection) {
-        return collection.stream().map(q->Map.entry(UUID.randomUUID(),q)).collect(Collectors.toList());
+
+    public static <T> List<Map.Entry<UUID, T>> addUUIDToCollection(Collection<T> collection) {
+        return collection.stream().map(q -> Map.entry(UUID.randomUUID(), q)).collect(Collectors.toList());
     }
+
     public static Set<String> getXpath2(Node xml) {
         return xml.hasChildNodes() ?
                 IntStream.range(0, xml.getChildNodes().getLength())
@@ -385,7 +402,9 @@ public class XML {
                         .map(q -> getXpath2(q))
                         .flatMap(q -> q.stream()).collect(Collectors.toSet())
                 : Collections.singleton(prepare2(xml));
-    }public static List<Map.Entry<UUID, String>> getXpath2UUID(Node xml) {
+    }
+
+    public static List<Map.Entry<UUID, String>> getXpath2UUID(Node xml) {
         return addUUIDToCollection(getXpath2(xml));
     }
 
@@ -405,7 +424,7 @@ public class XML {
 
     public static Map.Entry<String, String> prepare3(Node xml) {
         return xml.getNodeName().equals("#document") ? Map.entry("", xml.getNodeValue()) : Map.entry(
-                prepare2(xml.getParentNode()) + (xml.getNodeName().equals("#text")?"":( "//" +xml.getNodeName()
+                prepare2(xml.getParentNode()) + (xml.getNodeName().equals("#text") ? "" : ("//" + xml.getNodeName()
                         + getNodeNum(xml)))
                         .replaceAll("//.{1,3}:", "//")
                         .replaceAll("//#.{0,}", ""), xml.getTextContent().replaceAll("(\n *)*", ""));
@@ -420,7 +439,8 @@ public class XML {
                 .findFirst().orElse(0);
         return String.format("[%s]", num + 1);
     }
-    public static String readFromInputStream( String file)
+
+    public static String readFromInputStream(String file)
             throws IOException {
 //        Path path = Paths.get(getClass().getClassLoader()
 //                .getResource("fileTest.txt").toURI());

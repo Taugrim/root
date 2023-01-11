@@ -1,19 +1,37 @@
 import combinator.XML;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import static combinator.Combinator.combinationsUUID;
+import static combinator.Combinator.fabric;
 import static combinator.XML.*;
 
 @Slf4j
 public class XMLTest {
+    String etalon="<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" +
+            "<q>\n" +
+            "    <w>\n" +
+            "        <e>1</e>\n" +
+            "    </w>\n" +
+            "    <r/>\n" +
+            "    <t1>2</t1>\n" +
+            "    <t2>3</t2>\n" +
+            "    <y>\n" +
+            "        <u1></u1>\n" +
+            "        <u2>4</u2>\n" +
+            "    </y>\n" +
+            "</q>";
     @Test
     void readToXml() throws IOException {
-        log.info(getXml());
-//        log.info(FileUtils.readFileToString(new File(getClass().getClassLoader().getResource("xml.xml").getFile()), "UTF-8"));
+        Assertions.assertEquals(etalon,getXml());
     }
 
     @Test
@@ -23,23 +41,42 @@ public class XMLTest {
 
     @Test
     void getXpath3DocumentTest() throws IOException {
-        getXpath3(getDocument(getXml())).forEach(q -> log.info(q.getKey()+"  "+q.getValue()));
+        getXpath3(getDocument(getXml())).forEach(q -> log.info(q.getKey() + "  " + q.getValue()));
     }
- @Test
+
+    @Test
     void getXpath2DocumentTest() throws IOException {
         getXpath2(getDocument(getXml())).forEach(q -> log.info(q));
     }
-   @Test
+
+    @Test
     void getXpath3DocumentUUIDTest() throws IOException {
-        getXpath3UUID(getDocument(getXml())).forEach(q -> log.info(q.getKey()+"  "+q.getValue()));
+        getXpath3UUID(getDocument(getXml())).forEach(q -> log.info(q.getKey() + "  " + q.getValue()));
     }
- @Test
+
+    @Test
     void getXpath2DocumentUUIDTest() throws IOException {
-        getXpath2UUID(getDocument(getXml())).forEach(q -> log.info(q.getKey()+"  "+q.getValue()));
+        getXpath2UUID(getDocument(getXml())).forEach(q -> log.info(q.getKey() + "  " + q.getValue()));
     }
- @Test
+
+    @Test
     void getDocumentRegexValueTest() throws IOException {
-     log.info(getStringFromDocument(getDocumentRegexValue(getDocument(getXml()))));
+        log.info(getStringFromDocument(getDocumentRegexValue(getDocument(getXml()))));
+    }
+    @Test
+    void replaceValuesTagsUUIDTest() throws IOException {
+        List<Map.Entry<UUID, List<Map.Entry<String, String>>>> list= combinationsUUID(List.of(
+                        fabric("/q[1]//t2[1]", List.of(
+                                "TEST1",
+                                "TEST2",
+                                "TEST3",
+                                "TEST4"
+                        ))
+
+                ));
+        list.forEach(q->log.info(q.getKey()+"  "+q.getValue()));
+        replaceValuesTagsUUID(getDocument(getXml()),list
+                ).forEach(q -> log.info(q.getKey() + "  " + getStringFromDocument(q.getValue())));
     }
 
     static String getXml() throws IOException {

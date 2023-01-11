@@ -37,15 +37,15 @@ public class Combinator {
     }
 
 
-    public static <T, V> List<Map<T, V>> combinationsListEntriesToListMaps(List<Map.Entry<T, V>> first, List<Map<T, V>> last) {
+    public static <T, V> List<List<Map.Entry<T, V>>> combinationsListEntriesToListMaps(List<Map.Entry<T, V>> first, List<List<Map.Entry<T, V>>> last) {
         return first.stream().flatMap(q -> combinationsEntriToListMaps(q, last).stream()).collect(toList());
     }
 
-    public static <T, V> List<Map<T, V>> combinationsEntriToListMaps(Map.Entry<T, V> entry, List<Map<T, V>> last) {
-        return last.isEmpty() ? List.of(Map.ofEntries(entry)) : last.stream().map(q -> {
-            Map<T, V> m = new HashMap<>();
-            m.putAll(q);
-            m.put(entry.getKey(), entry.getValue())
+    public static <T, V> List<List<Map.Entry<T, V>>> combinationsEntriToListMaps(Map.Entry<T, V> entry, List<List<Map.Entry<T, V>>>last) {
+        return last.isEmpty() ? List.of(List.of(entry)) : last.stream().map(q -> {
+            List<Map.Entry<T, V>> m = new ArrayList<>();
+            m.addAll(q);
+            m.add(entry)
             ;
             return m;
         }).collect(toList());
@@ -60,9 +60,9 @@ public class Combinator {
      * @param <V>
      * @return
      */
-    public static <T, V> List<Map<T, V>> addOneEntryToListMapEntry(Map.Entry<T, V> entry, List<Map.Entry<T, V>> values) {
+    public static <T, V> List<List<Map.Entry<T, V>>> addOneEntryToListMapEntry(Map.Entry<T, V> entry, List<Map.Entry<T, V>> values) {
 
-        return values.stream().map(q -> Map.ofEntries(q, entry)).collect(toList());
+        return values.stream().map(q -> List.of(q, entry)).collect(toList());
     }
 
     /**
@@ -74,16 +74,16 @@ public class Combinator {
      * @param <V>
      * @return лис тмап из всех авриантов значений первого и второго списка
      */
-    public static <T, V> List<Map<T, V>> combineListMapEntryToListMapEntry(List<Map.Entry<T, V>> first, List<Map.Entry<T, V>> last) {
+    public static <T, V> List<List<Map.Entry<T, V>>> combineListMapEntryToListMapEntry(List<Map.Entry<T, V>> first, List<Map.Entry<T, V>> last) {
         return first.stream().flatMap(q -> addOneEntryToListMapEntry(q, last).stream()).collect(toList());
     }
 
-    public static <T, V> List<Map.Entry<UUID, Map<T, V>>> combinationsUUID(List<List<Map.Entry<T, V>>> first) {
+    public static <T, V> List<Map.Entry<UUID, List<Map.Entry<T, V>>>> combinationsUUID(List<List<Map.Entry<T, V>>> first) {
         return combinations(first).stream().map(q-> Map.entry(UUID.randomUUID(),q)).collect(toList());
     }
-    public static <T, V> List<Map<T, V>> combinations(List<List<Map.Entry<T, V>>> first) {
+    public static <T, V> List<List<Map.Entry<T, V>>> combinations(List<List<Map.Entry<T, V>>> first) {
         return first.isEmpty() ? Collections.EMPTY_LIST
-                : first.size() == 1 ? Collections.singletonList(listEntriesToMap(first.get(0)))
+                : first.size() == 1 ? first.get(0).stream().map(q->List.of(q)).collect(toList())
                 : first.size() == 2 ? combineListMapEntryToListMapEntry(first.get(0), first.get(1))
                 : combinationsListEntriesToListMaps(first.get(0), combinations(first.subList(1, first.size())));
 

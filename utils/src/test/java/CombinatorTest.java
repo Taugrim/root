@@ -19,7 +19,7 @@ public class CombinatorTest {
                         fabric("e", List.of("e1", "e2")),
                         fabric("r", List.of("r1"))
                 )
-        ).forEach(q -> log.info(q.getKey()+"  "+q.getValue().entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
+        ).forEach(q -> log.info(q.getKey()+"  "+q.getValue().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
 
     }
     @Test
