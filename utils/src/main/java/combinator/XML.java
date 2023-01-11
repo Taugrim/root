@@ -1,5 +1,6 @@
 package combinator;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -7,8 +8,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
-import org.jsoup.Jsoup;
-import org.jsoup.helper.W3CDom;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,7 +32,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class XML {
-    public static ObjectNode documentToJsonNode(Document document){
+    public static ObjectNode documentToJObjectNode(Document document){
 
         try {
             return new XmlMapper().readValue(getStringFromDocument(document).getBytes(),ObjectNode.class);
@@ -51,7 +50,14 @@ public class XML {
         }
 
     }
+    public static Document jsonNodeToDocument(ObjectNode objectNode){
 
+        try {
+            return getDocument( new XmlMapper().writeValueAsString(objectNode));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * разделяеть xpath на имена нод работает на абсолютном и отностильном пути
      *

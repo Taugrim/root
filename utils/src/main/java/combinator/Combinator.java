@@ -9,43 +9,6 @@ import static java.util.stream.Collectors.*;
 
 
 public class Combinator {
-    public static void main(String[] args) {
-        combinationsUUID(List.of(
-                        fabric("a", List.of("a1")),
-                        fabric("q", List.of("q1", "q2")),
-                        fabric("w", List.of("w1", "w2", "w3")),
-                        fabric("e", List.of("e1", "e2")),
-                        fabric("r", List.of("r1"))
-                )
-        ).forEach(q -> System.out.println(q.getKey()+"  "+q.getValue().entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        Deque<Deque<Map.Entry<String, String>>> l = new LinkedList();
-        l.addAll((List.of(
-                fabric("a", List.of("a1")),
-                fabric("q", List.of("q1", "q2")),
-                fabric("w", List.of("w1", "w2")),
-                fabric("e", List.of("e1", "e2", "e3", "e4")),
-                fabric("r", List.of("r1"))
-        )));
-
-        combinationsSliserUUID(l
-        ).forEach(q -> System.out.println(q.getKey()+"  "+q.getValue().entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
-        System.out.println("");
-        System.out.println("");
-        System.out.println("");
-        Deque<Deque<Map.Entry<String, String>>> ll = new LinkedList();
-        ll.addAll((List.of(
-                fabric("a", List.of("a1")),
-                fabric("q", List.of("q1", "q2")),
-                fabric("w", List.of("w1", "w2")),
-                fabric("e", List.of("e1", "e2", "e3", "e4")),
-                fabric("r", List.of("r1"))
-        )));
-        pairWiseListUUID(ll
-        ).forEach(q -> System.out.println(q.getKey()+"  "+q.getValue().entrySet().stream().map(qq -> " (" + qq.getKey() + "," + qq.getValue() + ") ").collect(Collectors.joining(" "))));
-    }
 
     /**
      * образует из одного ключа и листа значений лист ентри
