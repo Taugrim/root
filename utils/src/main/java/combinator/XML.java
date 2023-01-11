@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import types.TypeValues;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Transformer;
@@ -28,6 +29,9 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static combinator.Generator.genBrokenRandomStringByRegex;
+import static combinator.Generator.genRandomStringByRegex;
 
 public class XML {
     public static ObjectNode documentToJObjectNode(Document document) {
@@ -178,12 +182,49 @@ public class XML {
 
     public static <T, V> Document replaceValuesTags(Document xml, List<Map.Entry<T, V>> xpathAndValue) {
         Document copy = copyDocument(xml);
-        xpathAndValue.forEach(q -> replaceValueTag(copy, q.getKey().toString(), q.getValue().toString()));
+
+        if (xpathAndValue.get(0).getValue() instanceof String) {
+            for (Map.Entry<T, V>q:xpathAndValue){
+                copy= replaceValueTag(copy, q.getKey().toString(), q.getValue().toString());
+            }
+        } else if (xpathAndValue.get(0).getValue() instanceof TypeValues) {
+            for (Map.Entry<T, V>q:xpathAndValue){
+               copy= replaceValueTag(copy, q.getKey().toString(), (TypeValues) q.getValue());
+            }
+
+        }
         return copy;
     }
 
+
     public static <T, V> List<Map.Entry<UUID, Document>> replaceValuesTagsUUID(Document xml, List<Map.Entry<UUID, List<Map.Entry<T, V>>>> xpathAndValue) {
         return xpathAndValue.stream().map(q -> Map.entry(q.getKey(), replaceValuesTags(xml, q.getValue()))).collect(Collectors.toList());
+    }
+
+    public static Document replaceValueTag(Document xml, String xpath, TypeValues value) {
+        Document res = null;
+        switch (value) {
+            case DEL:
+                return deleteNode(xml, xpath);
+//                break;
+            case LOGICBREAK:
+                res = replaceValueTag(xml, xpath, genRandomStringByRegex(getValueNodeByXpath(xml,xpath)));
+                break;
+            case BREAK:
+                res = replaceValueTag(xml, xpath, genBrokenRandomStringByRegex(getValueNodeByXpath(xml,xpath)));
+                break;
+            case EMPTY:
+                res = replaceValueTag(xml, xpath, "");
+                break;
+            case NULL:
+                res = replaceValueTag(xml, xpath, (String) null);
+                break;
+            case SELPH:res=xml;
+                break;
+            default:
+                break;
+        }
+        return res;
     }
 
     public static Document replaceValueTag(Document xml, String xpath, String value) {

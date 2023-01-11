@@ -1,10 +1,8 @@
-import combinator.XML;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import types.TypeValues;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +70,24 @@ public class XMLTest {
                                 "TEST3",
                                 "TEST4"
                         ))
+
+                ));
+        list.forEach(q->log.info(q.getKey()+"  "+q.getValue()));
+        replaceValuesTagsUUID(getDocument(getXml()),list
+                ).forEach(q -> log.info(q.getKey() + "  " + getStringFromDocument(q.getValue())));
+    }
+  @Test
+    void replaceValuesTagsUUIDTYPESTest() throws IOException {
+
+        List<Map.Entry<UUID, List<Map.Entry<String, TypeValues>>>> list= combinationsUUID(List.of(
+                        fabric("/q[1]//t4[1]", List.of(
+                              TypeValues.LOGICBREAK,
+                                TypeValues.BREAK,
+                                TypeValues.EMPTY,
+                                TypeValues.NULL,
+                                TypeValues.SELPH,
+                                TypeValues.DEL
+                                ))
 
                 ));
         list.forEach(q->log.info(q.getKey()+"  "+q.getValue()));
