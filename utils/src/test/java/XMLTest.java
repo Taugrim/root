@@ -78,7 +78,6 @@ public class XMLTest {
     }
   @Test
     void replaceValuesTagsUUIDTYPESTest() throws IOException {
-
         List<Map.Entry<UUID, List<Map.Entry<String, TypeValues>>>> list= combinationsUUID(List.of(
                         fabric("/q[1]//t4[1]", List.of(
                               TypeValues.LOGICBREAK,
