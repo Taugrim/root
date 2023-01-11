@@ -153,7 +153,7 @@ public class XML {
     }
 
     public static Document getDocumentRegexValue(Document doc) {
-        Set<String> xpath = getXpath2(doc);
+        Set<String> xpath = getXpath3(doc).stream().filter(q->!q.getValue().equals("")).map(q->q.getKey()).collect(Collectors.toSet());
         for (String xp : xpath) {
             String node = getValueNodeByXpath(doc, xp);
             if (node == null) continue;
@@ -372,7 +372,12 @@ public class XML {
                         .flatMap(q -> q.stream()).collect(Collectors.toSet())
                 : Collections.singleton(prepare3(xml));
     }
-
+  public static List<Map.Entry<UUID, Map.Entry<String, String>>> getXpath3UUID(Node xml) {
+        return addUUIDToCollection(getXpath3(xml));
+    }
+    public static <T>List<Map.Entry<UUID,T>>addUUIDToCollection(Collection<T> collection) {
+        return collection.stream().map(q->Map.entry(UUID.randomUUID(),q)).collect(Collectors.toList());
+    }
     public static Set<String> getXpath2(Node xml) {
         return xml.hasChildNodes() ?
                 IntStream.range(0, xml.getChildNodes().getLength())
@@ -380,6 +385,8 @@ public class XML {
                         .map(q -> getXpath2(q))
                         .flatMap(q -> q.stream()).collect(Collectors.toSet())
                 : Collections.singleton(prepare2(xml));
+    }public static List<Map.Entry<UUID, String>> getXpath2UUID(Node xml) {
+        return addUUIDToCollection(getXpath2(xml));
     }
 
     public static String prepare(Node xml) {

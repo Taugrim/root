@@ -29,6 +29,18 @@ public class XMLTest {
     void getXpath2DocumentTest() throws IOException {
         getXpath2(getDocument(getXml())).forEach(q -> log.info(q));
     }
+   @Test
+    void getXpath3DocumentUUIDTest() throws IOException {
+        getXpath3UUID(getDocument(getXml())).forEach(q -> log.info(q.getKey()+"  "+q.getValue()));
+    }
+ @Test
+    void getXpath2DocumentUUIDTest() throws IOException {
+        getXpath2UUID(getDocument(getXml())).forEach(q -> log.info(q.getKey()+"  "+q.getValue()));
+    }
+ @Test
+    void getDocumentRegexValueTest() throws IOException {
+     log.info(getStringFromDocument(getDocumentRegexValue(getDocument(getXml()))));
+    }
 
     static String getXml() throws IOException {
         return readFromInputStream("/home/q/Документы/git/utils/src/test/resources/xml.xml");
