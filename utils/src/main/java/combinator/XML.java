@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import types.Diffs;
 import types.TypeValues;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -184,18 +185,41 @@ public class XML {
         Document copy = copyDocument(xml);
 
         if (xpathAndValue.get(0).getValue() instanceof String) {
-            for (Map.Entry<T, V>q:xpathAndValue){
-                copy= replaceValueTag(copy, q.getKey().toString(), q.getValue().toString());
+            for (Map.Entry<T, V> q : xpathAndValue) {
+                copy = replaceValueTag(copy, q.getKey().toString(), q.getValue().toString());
             }
         } else if (xpathAndValue.get(0).getValue() instanceof TypeValues) {
-            for (Map.Entry<T, V>q:xpathAndValue){
-               copy= replaceValueTag(copy, q.getKey().toString(), (TypeValues) q.getValue());
+            for (Map.Entry<T, V> q : xpathAndValue) {
+                copy = replaceValueTag(copy, q.getKey().toString(), (TypeValues) q.getValue());
             }
 
         }
         return copy;
     }
 
+    public static Map<Diffs, Map<String, Map.Entry<String, String>>> diff(Document old, Document news) {
+        Map<String, String> xpathOld = getXpath3(old).stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, String> xpathNew = getXpath3(news).stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, Map.Entry<String, String>> oldDiff = new HashMap<>();
+
+        Map<String, Map.Entry<String, String>> mergeDiff = xpathOld.entrySet().stream().peek(q -> {
+                            if (!xpathNew.containsKey(q.getKey())) ;
+                            {
+                                oldDiff.put(q.getKey(), Map.entry(q.getValue(), "old"));
+                            }
+                        }
+                ).filter(q -> xpathNew.containsKey(q.getKey()) && !xpathNew.get(q.getKey()).equals(q.getValue()))
+                .collect(Collectors.toMap(q -> q.getKey(), w -> Map.entry(w.getValue(), xpathNew.get(w.getKey()))));
+
+        Map<String, Map.Entry<String, String>> newDiff = xpathNew.entrySet().stream()
+                .filter(q -> !xpathOld.containsKey(q.getKey()))
+                .collect(Collectors.toMap(q -> q.getKey(), w -> Map.entry(w.getValue(), "new")));
+        Map<Diffs, Map<String, Map.Entry<String, String>>> res = new HashMap<>();
+        res.put(Diffs.OLD, oldDiff);
+        res.put(Diffs.MERGE, mergeDiff);
+        res.put(Diffs.NEW, newDiff);
+        return res;
+    }
 
     public static <T, V> List<Map.Entry<UUID, Document>> replaceValuesTagsUUID(Document xml, List<Map.Entry<UUID, List<Map.Entry<T, V>>>> xpathAndValue) {
         return xpathAndValue.stream().map(q -> Map.entry(q.getKey(), replaceValuesTags(xml, q.getValue()))).collect(Collectors.toList());
@@ -208,10 +232,10 @@ public class XML {
                 return deleteNode(xml, xpath);
 //                break;
             case LOGICBREAK:
-                res = replaceValueTag(xml, xpath, genRandomStringByRegex(getValueNodeByXpath(xml,xpath)));
+                res = replaceValueTag(xml, xpath, genRandomStringByRegex(getValueNodeByXpath(xml, xpath)));
                 break;
             case BREAK:
-                res = replaceValueTag(xml, xpath, genBrokenRandomStringByRegex(getValueNodeByXpath(xml,xpath)));
+                res = replaceValueTag(xml, xpath, genBrokenRandomStringByRegex(getValueNodeByXpath(xml, xpath)));
                 break;
             case EMPTY:
                 res = replaceValueTag(xml, xpath, "");
@@ -219,7 +243,8 @@ public class XML {
             case NULL:
                 res = replaceValueTag(xml, xpath, (String) null);
                 break;
-            case SELPH:res=xml;
+            case SELPH:
+                res = xml;
                 break;
             default:
                 break;
