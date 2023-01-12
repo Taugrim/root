@@ -3,6 +3,7 @@ package combinator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import types.Diffs;
 import types.TypeValues;
 
 import java.io.IOException;
@@ -99,5 +100,18 @@ public class XMLTest {
     static String getXml() throws IOException {
         return readFromInputStream("/home/q/Документы/git/utils/src/test/resources/xml.xml");
 
+    }
+static String getXml2() throws IOException {
+        return readFromInputStream("/home/q/Документы/git/utils/src/test/resources/xml2.xml");
+
+    }
+
+    @Test
+    void diffTest() throws IOException {
+        Map<Diffs, Map<String, Map.Entry<String, String>>> res=
+                diff(getDocument(getXml()),getDocument(getXml2()), q->!q.getKey().equals("//q[1]//y[1]//u1[1]"));
+        res.get(Diffs.NEW).entrySet().forEach(q->log.info("NEW ={}",q.getKey()+"  "+q.getValue().getKey()+"  "+q.getValue().getValue()));
+        res.get(Diffs.MERGE).entrySet().forEach(q->log.info("MERGE ={}",q.getKey()+"  "+q.getValue().getKey()+"  "+q.getValue().getValue()));
+        res.get(Diffs.OLD).entrySet().forEach(q->log.info("OLD ={}",q.getKey()+"  "+q.getValue().getKey()+"  "+q.getValue().getValue()));
     }
 }

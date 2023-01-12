@@ -27,6 +27,7 @@ import javax.xml.xpath.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -197,13 +198,18 @@ public class XML {
         return copy;
     }
 
-    public static Map<Diffs, Map<String, Map.Entry<String, String>>> diff(Document old, Document news) {
-        Map<String, String> xpathOld = getXpath3(old).stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        Map<String, String> xpathNew = getXpath3(news).stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    public static Map<Diffs, Map<String, Map.Entry<String, String>>> diff(Document old,
+                                                                          Document news,
+                                                                          Predicate<Map.Entry<String, String>>
+                                                                                  excludeInclude) {
+        Map<String, String> xpathOld = getXpath3(old).stream().filter(excludeInclude)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, String> xpathNew = getXpath3(news).stream().filter(excludeInclude)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         Map<String, Map.Entry<String, String>> oldDiff = new HashMap<>();
 
         Map<String, Map.Entry<String, String>> mergeDiff = xpathOld.entrySet().stream().peek(q -> {
-                            if (!xpathNew.containsKey(q.getKey())) ;
+                            if (!xpathNew.containsKey(q.getKey()))
                             {
                                 oldDiff.put(q.getKey(), Map.entry(q.getValue(), "old"));
                             }
