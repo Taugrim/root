@@ -114,4 +114,14 @@ static String getXml2() throws IOException {
         res.get(Diffs.MERGE).entrySet().forEach(q->log.info("MERGE ={}",q.getKey()+"  "+q.getValue().getKey()+"  "+q.getValue().getValue()));
         res.get(Diffs.OLD).entrySet().forEach(q->log.info("OLD ={}",q.getKey()+"  "+q.getValue().getKey()+"  "+q.getValue().getValue()));
     }
+
+    @Test
+    void documentToJObjectNodeTest() throws IOException {
+        log.info(jsonNodeToString(documentToJObjectNode(getDocument(getXml()))));
+    }
+
+    @Test
+    void jsonNodeToDocumentTest() {
+//        jsonNodeToDocument()
+    }
 }

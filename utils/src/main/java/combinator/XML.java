@@ -197,7 +197,12 @@ public class XML {
         }
         return copy;
     }
-
+    public static Map<Diffs, Map<String, Map.Entry<String, String>>> diffDocumentAndJson(Document document,
+                                                                                         ObjectNode json,
+                                                                          Predicate<Map.Entry<String, String>>
+                                                                                  excludeInclude) {
+        return diff(document,jsonNodeToDocument(json),excludeInclude);
+    }
     public static Map<Diffs, Map<String, Map.Entry<String, String>>> diff(Document old,
                                                                           Document news,
                                                                           Predicate<Map.Entry<String, String>>
@@ -220,11 +225,7 @@ public class XML {
         Map<String, Map.Entry<String, String>> newDiff = xpathNew.entrySet().stream()
                 .filter(q -> !xpathOld.containsKey(q.getKey()))
                 .collect(Collectors.toMap(q -> q.getKey(), w -> Map.entry(w.getValue(), "new")));
-        Map<Diffs, Map<String, Map.Entry<String, String>>> res = new HashMap<>();
-        res.put(Diffs.OLD, oldDiff);
-        res.put(Diffs.MERGE, mergeDiff);
-        res.put(Diffs.NEW, newDiff);
-        return res;
+        return Map.of(Diffs.OLD, oldDiff,Diffs.MERGE, mergeDiff,Diffs.NEW, newDiff);
     }
 
     public static <T, V> List<Map.Entry<UUID, Document>> replaceValuesTagsUUID(Document xml, List<Map.Entry<UUID, List<Map.Entry<T, V>>>> xpathAndValue) {
