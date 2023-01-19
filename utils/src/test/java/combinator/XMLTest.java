@@ -1,5 +1,6 @@
 package combinator;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -120,8 +121,17 @@ static String getXml2() throws IOException {
         log.info(jsonNodeToString(documentToJObjectNode(getDocument(getXml()))));
     }
 
+
     @Test
-    void jsonNodeToDocumentTest() {
-//        jsonNodeToDocument()
+    void diffDocumentAndJsonTest() throws IOException {
+        Map<Diffs, Map<String, Map.Entry<String, String>>> res= diffDocumentAndJson(getDocument(getXml()),documentToJObjectNode(getDocument(getXml())),q->true);
+        res.get(Diffs.NEW).entrySet().forEach(q->log.info("NEW ={}",q.getKey()+"  "+q.getValue().getKey()+"  "+q.getValue().getValue()));
+        res.get(Diffs.MERGE).entrySet().forEach(q->log.info("MERGE ={}",q.getKey()+"  "+q.getValue().getKey()+"  "+q.getValue().getValue()));
+        res.get(Diffs.OLD).entrySet().forEach(q->log.info("OLD ={}",q.getKey()+"  "+q.getValue().getKey()+"  "+q.getValue().getValue()));
+    }
+
+    @Test
+    void jsonNodeToDocumentTest() throws IOException {
+        log.info (jsonNodeToString( documentToJObjectNode(getDocument(getXml()))));
     }
 }
