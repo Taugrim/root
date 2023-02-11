@@ -14,7 +14,7 @@ table, th, td {
 </head>
 <body>
 <div id="app" class="ss"></div>
-<!--<div id="js" class="ss"></div>-->
+<div id="js" class="ss"></div>
 <script src="/js/main.js"></script>
 <script src="/js/json.js"></script>
 
@@ -27,6 +27,7 @@ table, th, td {
         <br> count = {{count}}
         <br> countPage = {{countPage}}
         <br> currentPage = {{currentPage}}
+        <input type="submit" value="Submit">
     </div>
     <div>
         <!--используем пересчитываемый динамически списко, для отображения кнопок-->
@@ -37,14 +38,17 @@ table, th, td {
     </div>
     <div>
         <table>
+            <tr>
+                <td>num</td>
+                <td> name</td>
+                <td> values</td>
+                <td> delimeter</td>
+            </tr>
             <tr  class="tr" v-for="row in paginationData">
                 <td>{{row.num}}</td>
                 <td> <input type="text" id="name"></td>
                 <td> <input type="text" id="values"></td>
-                <td> <input type="text" id="delimeter"></td>
-<!--                <td v-if="row.status === 'Выполнена'" >-</td>-->
-<!--                <td v-if="row.status !== 'Выполнена'" ><a  :href="row.Crm_link">{{row.Crm_title}}</a></td>-->
-<!--                <td><a :href="row.report_link">Отчет</a></td>-->
+                <td> <input type="text" id="delimeter" value=";"></td>
             </tr>
         </table>
     </div>
