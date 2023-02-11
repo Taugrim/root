@@ -13,6 +13,18 @@ import static combinator.Combinator.*;
 @Slf4j
 public class CombinatorTest {
     @Test
+    void combinationsCTest(){
+        combinationsC(List.of(
+                        fabric("a", List.of("a1")),
+                        fabric("q", List.of("q1", "q2")),
+                        fabric("w", List.of("w1", "w2", "w3")),
+                        fabric("e", List.of("e1", "e2")),
+                        fabric("r", List.of("r1"))
+                )
+        ).forEach(q -> log.info(q.toString()));
+
+    }
+    @Test
     void combinationsUUIDTest(){
         combinationsUUID(List.of(
                         fabric("a", List.of("a1")),

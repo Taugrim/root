@@ -1,6 +1,9 @@
 package combinator;
 
 
+import types.ContainerC;
+import types.ContainerPWS;
+
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -88,9 +91,14 @@ public class Combinator {
                 : combinationsListEntriesToListMaps(first.get(0), combinations(first.subList(1, first.size())));
 
     }
-
+    public static <T, V> List<ContainerC<T, V>> combinationsC(List<List<Map.Entry<T, V>>> first) {
+        return combinations(first).stream().map(q->new ContainerC<T,V>(UUID.randomUUID(),q)).collect(toList());
+    }
     public static <T, V> List<Map.Entry<UUID, Map<T, V>>> combinationsSliserUUID(Deque<Deque<Map.Entry<T, V>>> first) {
         return combinationsSliser(first).stream().map(q-> Map.entry(UUID.randomUUID(),q)).collect(toList());
+    }
+    public static <T, V> List<ContainerPWS<T, V>> combinationsSliserPWS(Deque<Deque<Map.Entry<T, V>>> first) {
+        return combinationsSliser(first).stream().map(q-> new ContainerPWS<T, V>(UUID.randomUUID(),q)).collect(toList());
     }
     public static <T, V> List<Map<T, V>> combinationsSliser(Deque<Deque<Map.Entry<T, V>>> first) {
         ;
@@ -100,6 +108,9 @@ public class Combinator {
 
     public static <T, V> List<Map.Entry<UUID, Map<T, V>>> pairWiseListUUID(Deque<Deque<Map.Entry<T, V>>> entryList) {
         return pairWiseList(entryList).stream().map(q-> Map.entry(UUID.randomUUID(),q)).collect(toList());
+    }
+    public static <T, V> List<ContainerPWS> pairWiseListC(Deque<Deque<Map.Entry<T, V>>> entryList) {
+        return pairWiseList(entryList).stream().map(q-> new ContainerPWS(UUID.randomUUID(),q)).collect(toList());
     }
     public static <T, V> List<Map<T, V>> pairWiseList(Deque<Deque<Map.Entry<T, V>>> entryList) {
         return pairWise(entryList.poll(), entryList, new ArrayList<>());

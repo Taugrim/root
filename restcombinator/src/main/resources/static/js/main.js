@@ -3,7 +3,7 @@ var messageApi=Vue.resource('/message{/id}');
 
 Vue.component('message-row',{
     props:['message'],
-    template:'<div><i>({{ message.id }})</i>{{ message.text }}</div>'
+        template:'<div><i>({{ message.id }})</i>{{ message.text }}</div>'
 });
 
 // Определяем новый компонент под именем todo-item

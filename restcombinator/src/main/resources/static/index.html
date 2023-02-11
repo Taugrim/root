@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+table, th, td {
+  border:1px solid black;
+}
+</style>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,8 +14,41 @@
 </head>
 <body>
 <div id="app" class="ss"></div>
-<div id="js" class="ss"></div>
+<!--<div id="js" class="ss"></div>-->
 <script src="/js/main.js"></script>
 <script src="/js/json.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+<div id="app2">
+    <div>
+        Отображать по
+        <input type="number" min="1" :max="10000" step="1" v-model="count">
+        <br> count = {{count}}
+        <br> countPage = {{countPage}}
+        <br> currentPage = {{currentPage}}
+    </div>
+    <div>
+        <!--используем пересчитываемый динамически списко, для отображения кнопок-->
+        <button v-for="asdf in paginationList"
+                @click="currentPage = asdf"
+                style="background-color: lightblue; margin-right: 10px"
+        > {{asdf}} </button>
+    </div>
+    <div>
+        <table>
+            <tr  class="tr" v-for="row in paginationData">
+                <td>{{row.num}}</td>
+                <td> <input type="text" id="name"></td>
+                <td> <input type="text" id="values"></td>
+                <td> <input type="text" id="delimeter"></td>
+<!--                <td v-if="row.status === 'Выполнена'" >-</td>-->
+<!--                <td v-if="row.status !== 'Выполнена'" ><a  :href="row.Crm_link">{{row.Crm_title}}</a></td>-->
+<!--                <td><a :href="row.report_link">Отчет</a></td>-->
+            </tr>
+        </table>
+    </div>
+</div>
+<script src="/js/table.js"></script>
 </body>
 </html>

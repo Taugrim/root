@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qatool.restcombinator.exeptions.NotFoundExeption;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import types.ContainerC;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static combinator.Combinator.combinationsUUID;
-import static combinator.Combinator.fabric;
+import static combinator.Combinator.*;
 
 @Slf4j
 @RestController
@@ -41,26 +41,27 @@ public class JsController {
 
    @GetMapping
 //    public List<String> getJson()  {
-    public List<Map.Entry<UUID, Map<String, String>>> getJson()  {
-           return   combinationsUUID(List.of(
+    public String getJson()  {
+           return   "["+combinationsC(List.of(
                            fabric("a", List.of("a1")),
                            fabric("q", List.of("q1", "q2")),
                            fabric("w", List.of("w1", "w2", "w3")),
                            fabric("e", List.of("e1", "e2")),
                            fabric("r", List.of("r1"))
                    )
-           );
+           )
+                   .stream().map(q->q.toString()).collect(Collectors.joining(","))+"]";
 //       return List.of("1","22","3");
     }
  @PostMapping("{json}")
-    public   Map<UUID, Map<String, String>>  createJson(@RequestBody String json) {
+    public    List<ContainerC<String, String>>  createJson(@RequestBody String json) {
      ObjectMapper objectMapper = new ObjectMapper();
-     List<Map.Entry<UUID, Map<String, String>>> json1=null;
+     List<ContainerC<String, String>> json1=null;
      String s="";
      try {
          Map<String, Object> map
                  = objectMapper.readValue(json,Map.class);
-        json1 = combinationsUUID(((Map<String, Object>) objectMapper
+        json1 = combinationsC(((Map<String, Object>) objectMapper
                  .readValue(json, Map.class).get("json"))
                  .entrySet().stream().map(q -> fabric((String) q.getKey(), (List<String>) q.getValue()))
                  .collect(Collectors.toList()));
@@ -69,7 +70,7 @@ public class JsController {
      } catch (JsonProcessingException e) {
 
      }
-        return json1.stream() .collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+        return json1;
     }
 
 }
