@@ -52,6 +52,19 @@ public class JsController {
            )
                    .stream().map(q->q.toString()).collect(Collectors.joining(","))+"]";
 //       return List.of("1","22","3");
+    }  @GetMapping("{js3}")
+//    public List<String> getJson()  {
+    public String getJson3()  {
+           return   "["+combinationsC(List.of(
+                           fabric("a", List.of("a1")),
+                           fabric("q", List.of("q1", "q2")),
+                           fabric("w", List.of("w1", "w2", "w3")),
+                           fabric("e", List.of("e1", "e2")),
+                           fabric("r", List.of("r1"))
+                   )
+           )
+                   .stream().map(q->q.toString()).collect(Collectors.joining(","))+"]";
+//       return List.of("1","22","3");
     }
  @PostMapping("{json}")
     public    List<ContainerC<String, String>>  createJson(@RequestBody String json) {
