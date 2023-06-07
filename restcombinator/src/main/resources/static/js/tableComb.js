@@ -7,13 +7,21 @@ var js3 =new Vue({
          template:
                  '<div>'+
                          '<table>'+
+
+                          '<tr  class="trv" v-for="val in paginationValues">'+
+                                                          '<td>{{val}}</td>'+
+                                                      '</tr>'+
+
+
+
+
                              '<tr>'+
                                  '<td>uuid</td>'+
                                  '<td>combinations</td>'+
                              '</tr>'+
                              '<tr  class="tr" v-for="row in paginationData">'+
                                  '<td>{{row.uuid}}</td>'+
-                                 '<td>{{row.combinations}}</td>'+
+                                 '<td>{{Object.values(row.combinations)}}</td>'+
                              '</tr>'+
                          '</table>'+
                      '</div>',
@@ -60,6 +68,10 @@ var js3 =new Vue({
                 console.log('sart'+start);
                 console.log('end'+end);
                 return this.rows.slice(start, end);
+            },
+            paginationValues(){
+              console.log('paginationValues'+Object.values(this.rows.slice(0, 1).combinations));
+                return Object.values(this.rows.slice(0, 1)).combinations;
             },
             // количество страниц ( после изменения ОТОБРАЖАТЬ ПО, произойдет пересчет данной величины)
             countPage(){

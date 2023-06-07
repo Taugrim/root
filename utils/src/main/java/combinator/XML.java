@@ -236,8 +236,8 @@ public class XML {
         Document res = null;
         switch (value) {
             case DEL:
-                return deleteNode(xml, xpath);
-//                break;
+                res= deleteNode(xml, xpath);
+                break;
             case LOGICBREAK:
                 res = replaceValueTag(xml, xpath, genRandomStringByRegex(getValueNodeByXpath(xml, xpath)));
                 break;

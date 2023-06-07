@@ -12,7 +12,18 @@ import static java.util.stream.Collectors.*;
 
 
 public class Combinator {
-
+    /**
+     * образует из листа ключей и листа значений лист ентри
+     * @param keys
+     * @param values
+     * @return
+     * @param <T>
+     * @param <V>
+     */
+    public static <T, V> LinkedList<Map.Entry<V, T>> fabricList(Collection<V> keys, List<T> values) {
+        return keys.parallelStream().flatMap(q->fabric(q,values).stream())
+                .collect(collectingAndThen(toList(), LinkedList::new));
+    }
     /**
      * образует из одного ключа и листа значений лист ентри
      *

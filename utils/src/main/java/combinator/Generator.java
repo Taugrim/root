@@ -10,16 +10,19 @@ public class Generator {
                 .replaceAll("[А-Я]","[А-Я]")
                 .replaceAll("[а-я]","[а-я]")
                 .replaceAll("\\d","\\\\\\d")
+                .replaceAll("\\D","\\\\\\D")
                 .replaceAll("\\+","\\\\\\+");
     }
   public static String genBrokenRegex(String node) {
-        return node
+        return node.equals("")?"[a-zA-zа-яА-я]"
+                :node
                 .replaceAll("[a-z]","\\\\\\d")
                 .replaceAll("[A-Z]","\\\\\\d")
                 .replaceAll("[А-Я]","\\\\\\d")
                 .replaceAll("[а-я]","\\\\\\d")
                 .replaceAll("\\d","[a-zA-zа-яА-я]")
                 .replaceAll("\\+","\\\\\\+")
+                .replaceAll("\\D","[a-zA-zа-яА-я]")
                 .replaceAll("\\s","P");
     }
     public static String genRandomStringByRegex(String str){
